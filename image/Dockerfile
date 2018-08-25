@@ -31,7 +31,7 @@ RUN cd /tmp/ &&\
     Rscript -e "update.packages(ask=FALSE, ${R_params})" &&\
     Rscript -e "if(!(require(\"callr\"))) install.packages(\"callr\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) install.packages(\"devtools\", ${R_params})" &&\
-    Rscript -e "if(!(require(\"devtools\"))) { q(-1L); }" &&\
+    Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
 # cleanup
     apt-get clean &&\
     apt-get autoclean -y &&\
