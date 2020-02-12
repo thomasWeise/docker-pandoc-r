@@ -16,16 +16,13 @@ ENV R_REPOS="c(\"http://cran.us.r-project.org\", \"http://cran.uk.r-project.org\
 
 # do all the installation
 RUN cd /tmp/ &&\
-    apt-get clean &&\
     apt-get update &&\
-    apt-get autoclean -y &&\
-    apt-get autoremove -y &&\
-    apt-get update &&\
-    apt-get install -f -y libxml2-dev \
-                          libssl-dev \
-                          libcurl4-openssl-dev \
-                          r-base \
-                          r-base-dev &&\
+    apt-get install -f -y --no-install-recommends \
+      libxml2-dev \
+      libssl-dev \
+      libcurl4-openssl-dev \
+      r-base \
+      r-base-dev &&\
 # install the required R packages
     R_params="repos=${R_REPOS}, dependencies=TRUE, clean=TRUE" &&\
     Rscript -e "update.packages(ask=FALSE, ${R_params})" &&\
@@ -33,10 +30,16 @@ RUN cd /tmp/ &&\
     Rscript -e "if(!(require(\"devtools\"))) install.packages(\"devtools\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
 # cleanup
-    apt-get clean &&\
-    apt-get autoclean -y &&\
-    apt-get autoremove -y &&\
-    apt-get clean &&\
+    apt-get clean -y || true &&\
     rm -rf /tmp/* /var/tmp/* &&\
     rm -rf /var/lib/apt/lists/* &&\
-    rm -f /etc/ssh/ssh_host_*
+    rm -f /etc/ssh/ssh_host_* &&\
+    rm -rf /usr/share/man &&\
+    mkdir -p /usr/share/man &&\
+    find /usr/share/doc -depth -type f ! -name copyright -delete &&\
+    find /usr/share/doc -type f -name "*.pdf" -delete &&\
+    find /usr/share/doc -type f -name "*.gz" -delete &&\
+    find /usr/share/doc -type f -name "*.tex" -delete &&\
+    find /usr/share/doc -type d -empty -delete || true &&\
+    mkdir -p /usr/share/doc &&\
+    mkdir -p /usr/share/info
