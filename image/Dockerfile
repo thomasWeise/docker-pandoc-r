@@ -14,6 +14,8 @@ MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV R_REPOS="c(\"http://cran.us.r-project.org\", \"http://cran.uk.r-project.org\",  \"http://mirrors.ustc.edu.cn/CRAN\", \"http://cran.wu.ac.at/\", \"http://cran.utstat.utoronto.ca/\", \"http://cran.rstudio.com/\", \"https://cran.uni-muenster.de/\", \"http://ftp.iitm.ac.in/cran/\")"
 
+ENV R_LIB_DIR="/usr/local/lib/R/site-library"
+
 # do all the installation
 RUN cd /tmp/ &&\
     apt-get update &&\
@@ -29,8 +31,25 @@ RUN cd /tmp/ &&\
     Rscript -e "if(!(require(\"callr\"))) install.packages(\"callr\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) install.packages(\"devtools\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
+# delete not needed R stuff
+    find /usr/share/R/doc -type f ! -name "COPY*" -delete &&\
+    find /usr/share/R/doc -type d -empty -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/doc/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/help/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/example[s]*/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/demo/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/html/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/htmlwidgets/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/tinytest/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.md" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.Rd" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/AUTHORS" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/CITATION" -delete || true &&\
+    find $R_LIB_DIR -type f -empty -delete || true &&\
+    find $R_LIB_DIR -type d -empty -delete || true &&\
 # cleanup
-    apt-get clean -y || true &&\
+    apt-get clean -y &&\
     rm -rf /tmp/* /var/tmp/* &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -f /etc/ssh/ssh_host_* &&\
