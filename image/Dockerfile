@@ -46,8 +46,13 @@ RUN cd /tmp/ &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/AUTHORS" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/CITATION" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/rstudioapi/.*" -delete || true &&\
+    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/BH/include/boost/winapi/.*" -delete || true &&\
     find $R_LIB_DIR -type f -empty -delete || true &&\
     find $R_LIB_DIR -type d -empty -delete || true &&\
+    find /usr/share/R -type f -name "READM*" -delete || true &&\
+    find /usr/share/R -type f -empty -delete || true &&\
+    find /usr/share/R -type d -empty -delete || true &&\
 # cleanup
     apt-get clean -y &&\
     rm -rf /tmp/* /var/tmp/* &&\
