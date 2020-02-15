@@ -32,8 +32,6 @@ RUN cd /tmp/ &&\
     Rscript -e "if(!(require(\"devtools\"))) install.packages(\"devtools\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
 # delete not needed R stuff
-    find /usr/share/R/doc -type f ! -name "COPY*" -delete &&\
-    find /usr/share/R/doc -type d -empty -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/doc/.*" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/help/.*" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/example[s]*/.*" -delete || true &&\
