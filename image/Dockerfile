@@ -49,11 +49,9 @@ RUN cd /tmp/ &&\
     rm -rf $R_LIB_DIR/shiny &&\
     find $R_LIB_DIR -type f -empty -delete || true &&\
     find $R_LIB_DIR -type d -empty -delete || true &&\
-    rm -rf /usr/share/R/doc &&\
     find /usr/share/R -type f -name "READM*" -delete || true &&\
     find /usr/share/R -type f -empty -delete || true &&\
     find /usr/share/R -type d -empty -delete || true &&\
-    mkdir -p /usr/share/R/doc &&\
 # cleanup
     apt-get clean -y &&\
     rm -rf /tmp/* /var/tmp/* &&\
