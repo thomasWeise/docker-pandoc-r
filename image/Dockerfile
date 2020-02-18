@@ -46,8 +46,10 @@ RUN cd /tmp/ &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/CITATION" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/rstudioapi/.*" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/BH/include/boost/winapi/.*" -delete || true &&\
+    rm -rf $R_LIB_DIR/shiny &&\
     find $R_LIB_DIR -type f -empty -delete || true &&\
     find $R_LIB_DIR -type d -empty -delete || true &&\
+    rm -rf /usr/share/R/doc &&\
     find /usr/share/R -type f -name "READM*" -delete || true &&\
     find /usr/share/R -type f -empty -delete || true &&\
     find /usr/share/R -type d -empty -delete || true &&\
