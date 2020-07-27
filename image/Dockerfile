@@ -37,26 +37,26 @@ RUN echo "Initial update." &&\
     Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
 # delete not needed R stuff
     echo "Delete useless R stuff." &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/doc/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/help/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/example[s]*/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/demo/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/html/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/htmlwidgets/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/tinytest/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.md" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.Rd" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/AUTHORS" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/CITATION" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/rstudioapi/.*" -delete || true &&\
-    find $R_LIB_DIR -type f -regex "$R_LIB_DIR/BH/include/boost/winapi/.*" -delete || true &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/doc/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/help/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/example[s]*/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/demo/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/html/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/htmlwidgets/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/tinytest/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.md" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS\.Rd" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/NEWS" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/AUTHORS" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/CITATION" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/rstudioapi/.*" -delete || true) &&\
+    (find $R_LIB_DIR -type f -regex "$R_LIB_DIR/BH/include/boost/winapi/.*" -delete || true) &&\
     rm -rf $R_LIB_DIR/shiny &&\
-    find $R_LIB_DIR -type f -empty -delete || true &&\
-    find $R_LIB_DIR -type d -empty -delete || true &&\
-    find /usr/share/R -type f -name "READM*" -delete || true &&\
-    find /usr/share/R -type f -empty -delete || true &&\
-    find /usr/share/R -type d -empty -delete || true &&\
+    (find $R_LIB_DIR -type f -empty -delete || true) &&\
+    (find $R_LIB_DIR -type d -empty -delete || true) &&\
+    (find /usr/share/R -type f -name "READM*" -delete || true) &&\
+    (find /usr/share/R -type f -empty -delete || true) &&\
+    (find /usr/share/R -type d -empty -delete || true) &&\
 # cleanup
     echo "Final clean up." &&\
     apt-get clean -y &&\
@@ -69,7 +69,7 @@ RUN echo "Initial update." &&\
     find /usr/share/doc -type f -name "*.pdf" -delete &&\
     find /usr/share/doc -type f -name "*.gz" -delete &&\
     find /usr/share/doc -type f -name "*.tex" -delete &&\
-    find /usr/share/doc -type d -empty -delete || true &&\
+    (find /usr/share/doc -type d -empty -delete || true) &&\
     mkdir -p /usr/share/doc &&\
     mkdir -p /usr/share/info &&\
     echo "All done."
