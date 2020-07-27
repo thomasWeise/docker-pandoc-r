@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM thomasweise/docker-pandoc-calibre
+FROM thomasweise/docker-pandoc-calibre:1.0
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 ENV R_REPOS="c(\"http://cran.us.r-project.org\", \"http://cran.uk.r-project.org\",  \"http://mirrors.ustc.edu.cn/CRAN\", \"http://cran.wu.ac.at/\", \"http://cran.utstat.utoronto.ca/\", \"http://cran.rstudio.com/\", \"https://cran.uni-muenster.de/\", \"http://ftp.iitm.ac.in/cran/\")"
@@ -17,8 +17,10 @@ ENV R_REPOS="c(\"http://cran.us.r-project.org\", \"http://cran.uk.r-project.org\
 ENV R_LIB_DIR="/usr/local/lib/R/site-library"
 
 # do all the installation
-RUN cd /tmp/ &&\
+RUN echo "Initial update." &&\
+    cd /tmp/ &&\
     apt-get update &&\
+    echo "Install R and the required components." &&\
     apt-get install -f -y --no-install-recommends \
       libxml2-dev \
       libssl-dev \
@@ -26,12 +28,15 @@ RUN cd /tmp/ &&\
       r-base \
       r-base-dev &&\
 # install the required R packages
+    echo "Update R packages." &&\
     R_params="repos=${R_REPOS}, dependencies=TRUE, clean=TRUE" &&\
     Rscript -e "update.packages(ask=FALSE, ${R_params})" &&\
+    echo "Install required R packages callr and devtools." &&\
     Rscript -e "if(!(require(\"callr\"))) install.packages(\"callr\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) install.packages(\"devtools\", ${R_params})" &&\
     Rscript -e "if(!(require(\"devtools\"))) { q(status=1L); }" &&\
 # delete not needed R stuff
+    echo "Delete useless R stuff." &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/doc/.*" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/help/.*" -delete || true &&\
     find $R_LIB_DIR -type f -regex "$R_LIB_DIR/[^/]+/example[s]*/.*" -delete || true &&\
@@ -53,6 +58,7 @@ RUN cd /tmp/ &&\
     find /usr/share/R -type f -empty -delete || true &&\
     find /usr/share/R -type d -empty -delete || true &&\
 # cleanup
+    echo "Final clean up." &&\
     apt-get clean -y &&\
     rm -rf /tmp/* /var/tmp/* &&\
     rm -rf /var/lib/apt/lists/* &&\
@@ -65,4 +71,5 @@ RUN cd /tmp/ &&\
     find /usr/share/doc -type f -name "*.tex" -delete &&\
     find /usr/share/doc -type d -empty -delete || true &&\
     mkdir -p /usr/share/doc &&\
-    mkdir -p /usr/share/info
+    mkdir -p /usr/share/info &&\
+    echo "All done."
